@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Noise Reduction</title>
+</head>
+
+<style type="text/css">
+  div {text-align: center;}
+body {
+    background-color:Gray;
+}
+
+</style>
+
+<body>  
+<div>
+  <h2>Voice Waveform</h2>  
+  <div style = "position:relative; left:500px; top:-30px;">      
+      <form method="POST" action="{{ url_for('download')}}">
+      Download      <input type="submit" value={{filename}}>
+      </form>  
+  </div>
+  <h4>Original Waveform</h4>
+  <img src="{{fig1}}" alt="Original Waveform" width=100% height="275">
+  <h4>Processed Waveform</h4>
+  <img src="{{fig2}}" alt="Processed Waveform" width=100% height="275">
+</div>
+</body>
+</html>
