@@ -1,3 +1,2 @@
 # noise-reduction
-Noise reduction and plot
-I use noisereduce and librosa for this project.
+Noise reduction and plot rendering using noisereduce and librosa.
