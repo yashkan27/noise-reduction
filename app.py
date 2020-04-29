@@ -44,8 +44,13 @@ def process():
 
     rate, data = wavfile.read(audio_path)
     data = np.asarray(data, dtype=np.float16)
-    reduced_noise = nr.reduce_noise(audio_clip=data, noise_clip=data)
-    wavfile.write(folder_path+f'clean_{f.filename}', rate, reduced_noise)
+    try:
+        reduced_noise = nr.reduce_noise(audio_clip=data, noise_clip=data)
+        wavfile.write(folder_path+f'clean_{f.filename}', rate, reduced_noise)
+    except:
+        data = data.flatten()/32768
+        reduced_noise = nr.reduce_noise(audio_clip=data, noise_clip=data)
+        wavfile.write(folder_path+f'clean_{f.filename}', rate*2, reduced_noise)
 
     plt.figure(figsize=(14, 5))
     librosa.display.waveplot(reduced_noise, sr=rate)
@@ -60,4 +65,4 @@ def download():
     return send_from_directory(directory=folder_path, filename='clean_'+process.filename)
 
 if __name__ == "__main__":
-    app.run(debug = True,use_reloader=False)
+    app.run()
