@@ -59,6 +59,5 @@ def process():
 def download():    
     return send_from_directory(directory=folder_path, filename='clean_'+process.filename)
 
-app.run()
-# if __name__ == "__main__":
-#     app.run(debug = True,use_reloader=False)
+if __name__ == "__main__":
+    app.run(debug = True,use_reloader=False)
