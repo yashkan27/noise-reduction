@@ -3,7 +3,6 @@
 
 from flask import render_template
 from flask import request, redirect, url_for,flash
-from werkzeug.utils import secure_filename
 import os
 from flask import Flask
 from flask import send_from_directory
@@ -18,6 +17,8 @@ import noisereduce as nr
 
 app = Flask(__name__)
 
+filename = "sample.wav"
+
 folder_path = 'static/upload/'
 if not os.path.exists('static/upload'):
 	os.mkdir(folder_path)
@@ -29,9 +30,7 @@ def index():
 @app.route('/process',methods=['GET','POST'])
 def process():
     if request.method == 'POST':
-        f = request.files['file']
-        filename = secure_filename(f.filename)
-        process.filename = filename
+        f = request.files['file']        
         file_path = folder_path+ filename
         f.save(file_path)
     audio_path = file_path
@@ -46,11 +45,11 @@ def process():
     data = np.asarray(data, dtype=np.float16)
     try:
         reduced_noise = nr.reduce_noise(audio_clip=data, noise_clip=data)
-        wavfile.write(folder_path+f'clean_{f.filename}', rate, reduced_noise)
+        wavfile.write(folder_path+f'clean_{filename}', rate, reduced_noise)
     except:
         data = data.flatten()/32768
         reduced_noise = nr.reduce_noise(audio_clip=data, noise_clip=data)
-        wavfile.write(folder_path+f'clean_{f.filename}', rate*2, reduced_noise)
+        wavfile.write(folder_path+f'clean_{filename}', rate*2, reduced_noise)
 
     plt.figure(figsize=(14, 5))
     librosa.display.waveplot(reduced_noise, sr=rate)
@@ -62,7 +61,7 @@ def process():
 
 @app.route('/uploads', methods=['GET', 'POST'])
 def download():    
-    return send_from_directory(directory=folder_path, filename='clean_'+process.filename)
+    return send_from_directory(directory=folder_path, filename='clean_'+filename)
 
 if __name__ == "__main__":
     app.run()
